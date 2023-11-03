@@ -22,6 +22,38 @@ const Cart = () => {
 }
 
 
+const downloadReceipt = () => {
+  const receiptContent = `
+      --Cart Total--
+
+  SubTotal:${totaprice}
+  Quantity :${totalquantity}
+  ---------------
+   Total:  ${totaprice}
+  `;
+
+  
+  const blob = new Blob([receiptContent], { type: "text/html" });
+
+ 
+  const url = window.URL.createObjectURL(blob);
+
+  
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "receipt.text"; 
+  a.style.display = "none";
+
+  
+  document.body.appendChild(a);
+  a.click();
+
+  
+  document.body.removeChild(a);
+  window.URL.revokeObjectURL(url);
+};
+
+
 useEffect(()=>{
   dispatch(calculateSubTotal());
  
@@ -145,7 +177,7 @@ useEffect(()=>{
               </div>
             </div>
             <div className="flex items-center justify-center pt-7 pb-10">
-              <Button>Download Receipt</Button>
+              <Button onClick={downloadReceipt}>Download Receipt</Button>
             </div>
           </div>
           </div>
