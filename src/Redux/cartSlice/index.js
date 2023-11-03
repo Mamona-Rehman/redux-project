@@ -22,8 +22,8 @@ const cartSlice = createSlice({
       }
     },
     getCartTotal:(state)=>{
-        const {totalquantity ,totaprice , subTotal} =state.items.reduce(
-            (cartTotal , cartItem ,subTotal ) =>{
+        const {totalquantity ,totaprice , } =state.items.reduce(
+            (cartTotal , cartItem  ) =>{
                 console.log(" cartTotal" , cartTotal);
                 console.log(" cartItem" , cartItem);
                 const {newPrice ,quantity} = cartItem
@@ -31,12 +31,14 @@ const cartSlice = createSlice({
                 const itemTotal = newPrice*quantity;
                 cartTotal.totaprice += itemTotal
                 cartTotal.totalquantity += quantity;
-                state.items.forEach((item) => {
-                  subTotal += item.newPrice * item.quantity;
-                });
+             
+               
                 return cartTotal; 
             },
-            {subTotal:0,
+
+
+            
+            {
               totaprice : 0,
              totalquantity:0
             }
@@ -44,8 +46,26 @@ const cartSlice = createSlice({
             )
             state.totaprice = parseInt(totaprice.toFixed(2))
             state.totalquantity = totalquantity
-            state.subTotal = subTotal
+           
     },
+    calculateSubTotal: (state) => {
+      
+      const {subTotal} = state.items.reduce(
+        (total, cartItem ,item) => {
+          console.log("total" , total)
+          console.log("cartitem" , cartItem )
+        
+        const { newPrice, quantity ,title} = cartItem;
+        const itemTotal = newPrice * quantity;
+        total.subTotal+=itemTotal;
+        return total  ;
+      }, 
+      {subTotal:0});
+
+      state.subTotal = subTotal;
+    },
+
+
     removeCartItems: (state, action) => {
         state.items = [];
     },
@@ -58,5 +78,6 @@ const cartSlice = createSlice({
  
   },
 });
-export const { addItemToCart , getCartTotal ,removeCartItems  , moveAll, likecart} = cartSlice.actions;
+export const { addItemToCart , getCartTotal ,removeCartItems  , moveAll, likecart ,calculateSubTotal}  = cartSlice.actions;
+export const selectSubTotal = (state) => state.cart.subTotal;
 export default cartSlice.reducer;

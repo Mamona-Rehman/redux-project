@@ -9,6 +9,7 @@ import {getCartTotal} from "../../Redux/cartSlice"
 import { useDispatch } from "react-redux";
 import {removeCartItems} from "../../Redux/cartSlice"
 import { Link } from "react-router-dom";
+import {calculateSubTotal} from "../../Redux/cartSlice"
 
 const Cart = () => {
   const [quantities, setQuantities] = useState([0]);
@@ -19,6 +20,13 @@ const Cart = () => {
   const removeTocart = () => {
     dispatch(removeCartItems());
 }
+
+
+useEffect(()=>{
+  dispatch(calculateSubTotal());
+ 
+},[items])
+
 
  useEffect(()=>{
     dispatch(getCartTotal());
@@ -91,7 +99,7 @@ const Cart = () => {
           ))} </div>
          </div>
           <div> <h1 className="flex items-center justify-center mt-5"> {data.newPrice}</h1></div>
-          <div> <h1 className="flex items-center justify-center mt-5"> {subTotal}</h1></div>
+          <div> <h1 className="flex items-center justify-center mt-5"> {data.newPrice*data.quantity}</h1></div>
         
          
         </div>
